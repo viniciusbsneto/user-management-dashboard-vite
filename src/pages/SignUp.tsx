@@ -98,19 +98,17 @@ function SignUp() {
             Sign up
           </Button>
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Typography sx={{ textAlign: 'center' }}>
-            Already have an account?{' '}
-            <Link
-              component={RouterLink}
-              to="/sign-in"
-              variant="body2"
-              sx={{ alignSelf: 'center' }}
-            >
-              Sign in
-            </Link>
-          </Typography>
-        </Box>
+        <Typography sx={{ textAlign: 'center' }}>
+          Already have an account?{' '}
+          <Link
+            component={RouterLink}
+            to="/sign-in"
+            variant="body2"
+            sx={{ alignSelf: 'center' }}
+          >
+            Sign in
+          </Link>
+        </Typography>
       </Card>
     </Container>
   )
