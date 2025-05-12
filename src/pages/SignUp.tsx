@@ -100,7 +100,7 @@ function SignUp() {
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Typography sx={{ textAlign: 'center' }}>
-            Already have an account?
+            Already have an account?{' '}
             <Link
               component={RouterLink}
               to="/sign-in"
