@@ -1,7 +1,6 @@
-import { BrowserRouter, Route, Routes } from 'react-router'
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
-
-import { NotFound, SignIn, SignUp, Users } from './pages'
+import Router from './router'
+import AppLayout from './layouts/AppLayout'
 
 function App() {
   const theme = createTheme()
@@ -9,14 +8,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Users />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AppLayout>
+        <Router />
+      </AppLayout>
     </ThemeProvider>
   )
 }
