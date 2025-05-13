@@ -78,12 +78,11 @@ function SignUp() {
         return
       }
 
-      const result = await signUp({ name, email, password })
+      const { token } = await signUp({ name, email, password })
 
-      if (result?.token) {
-        localStorage.setItem('authToken', result.token)
-        navigate('/')
-      }
+      localStorage.setItem('authToken', token)
+
+      navigate('/')
     } catch (error) {
       console.error(error)
 

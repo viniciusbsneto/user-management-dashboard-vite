@@ -15,18 +15,14 @@ export async function signUp({
   name,
   email,
   password,
-}: SignUpParams): Promise<SignUpResponse | null> {
-  try {
-    const response = await httpClient.post<SignUpResponse>('register', {
-      name,
-      email,
-      password,
-    })
+}: SignUpParams): Promise<SignUpResponse> {
+  const response = await httpClient.post<SignUpResponse>('register', {
+    name,
+    email,
+    password,
+  })
 
-    return response.data
-  } catch (error) {
-    console.error(error)
+  const { id, token } = response.data
 
-    return null
-  }
+  return { id, token }
 }
