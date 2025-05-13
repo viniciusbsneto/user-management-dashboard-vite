@@ -2,15 +2,17 @@ import {
   Box,
   Button,
   Card as MuiCard,
-  FormControl,
-  FormLabel,
   Link,
   Stack,
   styled,
   TextField,
   Typography,
 } from '@mui/material'
-import { Link as RouterLink } from 'react-router'
+import { useForm } from 'react-hook-form'
+import { Link as RouterLink, useNavigate } from 'react-router'
+import { signIn } from '../api/auth/sign-in'
+import { useState } from 'react'
+import type { AxiosError } from 'axios'
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -33,7 +35,51 @@ const Container = styled(Stack)(({ theme }) => ({
   },
 }))
 
+interface SignInFormValues {
+  email: string
+  password: string
+}
+
 function SignIn() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const { register, handleSubmit, formState, setError } =
+    useForm<SignInFormValues>({
+      defaultValues: {
+        email: '',
+        password: '',
+      },
+    })
+  const { isSubmitting, errors } = formState
+  const navigate = useNavigate()
+
+  const handleSignIn = handleSubmit(async values => {
+    try {
+      const { email, password } = values
+
+      const { token } = await signIn({ email, password })
+
+      localStorage.setItem('authToken', token)
+      navigate('/')
+    } catch (error) {
+      console.error(error)
+
+      const axiosError = error as AxiosError
+
+      if (axiosError.response?.status === 400) {
+        setError('root.serverError', {
+          type: '400',
+          message: 'Invalid email or password. Please try again.',
+        })
+      } else {
+        setError('root.serverError', {
+          type: 'server side',
+          message: 'An error occurred. Please try again.',
+        })
+      }
+    }
+  })
+
   return (
     <Container>
       <Card>
@@ -43,34 +89,47 @@ function SignIn() {
         <Box
           component="form"
           sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+          onSubmit={handleSignIn}
         >
-          <FormControl>
-            <FormLabel htmlFor="email">Email</FormLabel>
-            <TextField
-              required
-              fullWidth
-              id="email"
-              name="email"
-              type="email"
-              placeholder="your@email.com"
-              autoComplete="email"
-              variant="outlined"
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="password">Password</FormLabel>
-            <TextField
-              required
-              fullWidth
-              id="password"
-              name="password"
-              type="password"
-              placeholder="••••••"
-              autoComplete="new-password"
-              variant="outlined"
-            />
-          </FormControl>
-          <Button type="submit" fullWidth variant="contained">
+          <TextField
+            {...register('email')}
+            required
+            fullWidth
+            id="email"
+            name="email"
+            type="email"
+            placeholder="your@email.com"
+            autoComplete="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            disabled={isSubmitting}
+            error={Boolean(errors.root?.serverError.type === '400')}
+          />
+          <TextField
+            {...register('password')}
+            required
+            fullWidth
+            id="password"
+            name="password"
+            type="password"
+            placeholder="••••••"
+            autoComplete="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            disabled={isSubmitting}
+            error={Boolean(errors.root?.serverError.type === '400')}
+          />
+          {errors.root?.serverError && (
+            <Typography color="error" variant="body2" align="center">
+              {errors.root.serverError.message}
+            </Typography>
+          )}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            loading={isSubmitting}
+          >
             Sign in
           </Button>
         </Box>
