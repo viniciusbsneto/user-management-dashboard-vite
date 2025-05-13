@@ -8,6 +8,8 @@ import {
   Typography,
 } from '@mui/material'
 
+import { signOut } from '../utils/auth'
+
 function AppLayout({ children }: PropsWithChildren) {
   return (
     <Box component="main">
@@ -16,7 +18,9 @@ function AppLayout({ children }: PropsWithChildren) {
           <Typography variant="h6" noWrap>
             Yet another user management app
           </Typography>
-          <Button color="inherit">Logout</Button>
+          <Button color="inherit" onClick={signOut}>
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
       <Toolbar />
