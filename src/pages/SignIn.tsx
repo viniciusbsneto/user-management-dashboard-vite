@@ -10,9 +10,10 @@ import {
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Link as RouterLink, useNavigate } from 'react-router'
-import { signIn } from '../api/auth/sign-in'
 import { useState } from 'react'
 import type { AxiosError } from 'axios'
+
+import { useAuth } from '../hooks'
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -52,14 +53,14 @@ function SignIn() {
     })
   const { isSubmitting, errors } = formState
   const navigate = useNavigate()
+  const { signIn } = useAuth()
 
   const handleSignIn = handleSubmit(async values => {
     try {
       const { email, password } = values
 
-      const { token } = await signIn({ email, password })
+      await signIn({ email, password })
 
-      localStorage.setItem('authToken', token)
       navigate('/')
     } catch (error) {
       console.error(error)

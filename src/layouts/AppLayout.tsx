@@ -8,9 +8,11 @@ import {
   Typography,
 } from '@mui/material'
 
-import { signOut } from '../utils/auth'
+import { useAuth } from '../hooks'
 
 function AppLayout({ children }: PropsWithChildren) {
+  const { token, signOut } = useAuth()
+
   return (
     <Box component="main">
       <AppBar position="fixed">
@@ -18,9 +20,11 @@ function AppLayout({ children }: PropsWithChildren) {
           <Typography variant="h6" noWrap>
             Yet another user management app
           </Typography>
-          <Button color="inherit" onClick={signOut}>
-            Logout
-          </Button>
+          {token && (
+            <Button color="inherit" onClick={signOut}>
+              Logout
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
       <Toolbar />
