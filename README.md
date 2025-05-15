@@ -63,6 +63,20 @@ npm run preview
 
 This will serve the built production assets from the `dist` directory, allowing you to check how your application will behave in a production environment.
 
+## Live Demo & Authentication
+
+A live demo of the application is available at:
+[https://user-management-dashboard-vite.netlify.app/](https://user-management-dashboard-vite.netlify.app/)
+
+To sign in to the application (both locally and demo), use the following credentials:
+
+```
+Email: eve.holt@reqres.in
+Password: pilot
+```
+
+These credentials are for demonstration purposes and connect to the [Reqres](https://reqres.in/) mock API service.
+
 ## Project Structure
 
 ```
