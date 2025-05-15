@@ -2,6 +2,7 @@ import { useState } from 'react'
 import {
   Avatar,
   Button,
+  IconButton,
   Paper,
   Stack,
   Table,
@@ -12,11 +13,12 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
+import { Delete } from '@mui/icons-material'
 
 import { Pagination } from '../components'
-import { getList } from '../api/users'
+import { getList, deleteUser as deleteUserApi } from '../api/users'
 
 const rowsPerPageOptions = [6]
 
@@ -28,6 +30,40 @@ function UsersList() {
   })
   const users = data?.data || []
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
+  const { mutateAsync: deleteUser } = useMutation({
+    mutationKey: ['users'],
+    mutationFn: deleteUserApi,
+    onMutate: async id => {
+      await queryClient.cancelQueries({ queryKey: ['users', 1] })
+
+      const previousUsers = queryClient.getQueryData(['users', 1])
+
+      if (previousUsers) {
+        queryClient.setQueryData(['users', 1], oldData => {
+          if (!oldData) return oldData
+
+          const updatedData = {
+            ...oldData,
+            data: oldData.data.filter(user => user.id !== id),
+          }
+
+          return updatedData
+        })
+      }
+
+      return { previousUsers }
+    },
+    onError: (_error, _variables, context) => {
+      if (context?.previousUsers) {
+        queryClient.setQueryData(['users', 1], context.previousUsers)
+      }
+    },
+    // I'm not invalidating the query here because the mutation does not affect the server since it's mocked. I'm updating the cache optimistically with data from the form.
+    // onSettled: () => {
+    //   queryClient.invalidateQueries({ queryKey: ['users', 1] })
+    // },
+  })
 
   return (
     <>
@@ -38,6 +74,7 @@ function UsersList() {
               <TableCell>Avatar</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Email</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -56,6 +93,17 @@ function UsersList() {
                 </TableCell>
                 <TableCell>{`${user.first_name} ${user.last_name}`}</TableCell>
                 <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  <IconButton
+                    color="error"
+                    onClick={async e => {
+                      e.stopPropagation()
+                      await deleteUser(user.id)
+                    }}
+                  >
+                    <Delete />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
