@@ -13,7 +13,7 @@ interface CreateUserParams {
 }
 
 export async function create({ name, email }: CreateUserParams): Promise<User> {
-  const response = await httpClient.post('users', { name, email })
+  const response = await httpClient.post<User>('users', { name, email })
 
   return response.data
 }
