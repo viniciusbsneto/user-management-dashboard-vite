@@ -4,11 +4,13 @@ import {
   Box,
   Button,
   Container,
+  Stack,
   Toolbar,
   Typography,
 } from '@mui/material'
 
 import { useAuth } from '../hooks'
+import { ToggleThemeButton } from './ToggleThemeButton'
 
 function AppLayout({ children }: PropsWithChildren) {
   const { token, signOut } = useAuth()
@@ -20,11 +22,14 @@ function AppLayout({ children }: PropsWithChildren) {
           <Typography variant="h6" noWrap>
             Yet another user management app
           </Typography>
-          {token && (
-            <Button color="inherit" onClick={signOut}>
-              Logout
-            </Button>
-          )}
+          <Stack direction="row" spacing={2}>
+            <ToggleThemeButton />
+            {token && (
+              <Button color="inherit" onClick={signOut}>
+                Logout
+              </Button>
+            )}
+          </Stack>
         </Toolbar>
       </AppBar>
       <Toolbar />

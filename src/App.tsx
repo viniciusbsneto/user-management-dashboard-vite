@@ -1,22 +1,21 @@
-import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
+import { CssBaseline } from '@mui/material'
 import { BrowserRouter } from 'react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-import { AuthProvider } from './contexts'
+import { AuthProvider, ThemeProvider } from './contexts'
 import AppLayout from './layouts/AppLayout'
 import Routes from './routes'
 
 const STALE_TIME_1_MINUTE = 1000 * 60 * 1
 
-function App() {
-  const theme = createTheme()
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { staleTime: STALE_TIME_1_MINUTE } },
-  })
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { staleTime: STALE_TIME_1_MINUTE } },
+})
 
+function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
       <CssBaseline />
       <BrowserRouter>
         <AuthProvider>
