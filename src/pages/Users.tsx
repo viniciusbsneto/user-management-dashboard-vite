@@ -1,18 +1,22 @@
 import { useState } from 'react'
 import {
   Avatar,
+  Button,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 
 import { Pagination } from '../components'
 import { getList } from '../api/users'
+import { useNavigate } from 'react-router'
 
 const rowsPerPageOptions = [6]
 
@@ -63,11 +67,18 @@ function UsersList() {
 }
 
 function Users() {
+  const navigate = useNavigate()
+
   return (
-    <>
-      <h1>Users</h1>
+    <Stack spacing={2}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Typography component="h1" variant="h4">
+          Users
+        </Typography>
+        <Button onClick={() => navigate('users/create')}>Create</Button>
+      </Stack>
       <UsersList />
-    </>
+    </Stack>
   )
 }
 
