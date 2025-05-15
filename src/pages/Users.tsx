@@ -13,10 +13,10 @@ import {
   Typography,
 } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router'
 
 import { Pagination } from '../components'
 import { getList } from '../api/users'
-import { useNavigate } from 'react-router'
 
 const rowsPerPageOptions = [6]
 
@@ -27,6 +27,7 @@ function UsersList() {
     queryFn: () => getList(page),
   })
   const users = data?.data || []
+  const navigate = useNavigate()
 
   return (
     <>
@@ -41,7 +42,12 @@ function UsersList() {
           </TableHead>
           <TableBody>
             {users.map(user => (
-              <TableRow key={user.id}>
+              <TableRow
+                key={user.id}
+                onClick={() => navigate(`users/${user.id}`)}
+                hover
+                sx={{ cursor: 'pointer' }}
+              >
                 <TableCell>
                   <Avatar
                     src={user.avatar}

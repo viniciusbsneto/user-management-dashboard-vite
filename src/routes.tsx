@@ -1,6 +1,13 @@
 import { Navigate, Route, Routes as RouterRoutes } from 'react-router'
 
-import { NotFound, SignIn, SignUp, Users, UsersCreate } from './pages'
+import {
+  NotFound,
+  SignIn,
+  SignUp,
+  Users,
+  UsersCreate,
+  UsersUpdate,
+} from './pages'
 import { ProtectedRoute } from './components'
 import { useAuth } from './hooks'
 
@@ -22,6 +29,14 @@ export default function Routes() {
         element={
           <ProtectedRoute>
             <UsersCreate />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users/:id"
+        element={
+          <ProtectedRoute>
+            <UsersUpdate />
           </ProtectedRoute>
         }
       />
