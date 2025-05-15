@@ -18,7 +18,11 @@ import { useNavigate } from 'react-router'
 import { Delete } from '@mui/icons-material'
 
 import { Pagination } from '../components'
-import { getList, deleteUser as deleteUserApi } from '../api/users'
+import {
+  getList,
+  deleteUser as deleteUserApi,
+  type GetListResponse,
+} from '../api/users'
 
 const rowsPerPageOptions = [6]
 
@@ -40,7 +44,7 @@ function UsersList() {
       const previousUsers = queryClient.getQueryData(['users', 1])
 
       if (previousUsers) {
-        queryClient.setQueryData(['users', 1], oldData => {
+        queryClient.setQueryData(['users', 1], (oldData: GetListResponse) => {
           if (!oldData) return oldData
 
           const updatedData = {

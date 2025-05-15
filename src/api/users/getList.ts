@@ -8,7 +8,7 @@ interface User {
   avatar: string
 }
 
-interface GetListResponse {
+export interface GetListResponse {
   page: number
   per_page: number
   total: number

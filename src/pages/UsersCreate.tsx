@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { create } from '../api/users'
+import { create, type GetListResponse } from '../api/users'
 import { Button, Stack, TextField, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
@@ -23,7 +23,7 @@ function UsersCreate() {
       const previousFirstPage = queryClient.getQueryData(['users', 1])
 
       if (previousFirstPage) {
-        queryClient.setQueryData(['users', 1], oldData => {
+        queryClient.setQueryData(['users', 1], (oldData: GetListResponse) => {
           if (!oldData) return oldData
 
           const formattedNewUser = {
